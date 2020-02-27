@@ -1,0 +1,21 @@
+PATH
+  remote: .
+  specs:
+    jirawatch (0.1.0)
+      dry-cli
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    concurrent-ruby (1.1.6)
+    dry-cli (0.5.1)
+      concurrent-ruby (~> 1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  jirawatch!
+
+BUNDLED WITH
+   2.1.4
