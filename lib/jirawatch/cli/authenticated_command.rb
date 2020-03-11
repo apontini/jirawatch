@@ -1,8 +1,9 @@
-require 'jirawatch/jira/provider'
+require 'jirawatch/jira/provisioning'
 
 module Jirawatch
   module CLI
     module AuthenticatedCommand
+      include Jirawatch::Jira::Provisioning
 
       def self.included(base)
 
@@ -10,8 +11,13 @@ module Jirawatch
           if name.eql? :call and not method_defined? :alias_call
             alias_method :alias_call, :call
             define_method(:call) do |*args, &block|
-              @jira_account = Jirawatch::Jira::Provider.login
-              send :alias_call, *args
+              @jira_account = login
+              
+              if @jira_account.nil?
+                puts "Login infos not found, please use: \n\njirawatch login\n\n"
+              else
+                send :alias_call, *args
+              end
             end
           end
         end

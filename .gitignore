@@ -2,3 +2,4 @@
 *.iml
 *.gem
 Gemfile.lock
+.jiratoken
