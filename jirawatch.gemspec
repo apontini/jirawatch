@@ -13,4 +13,5 @@ Gem::Specification.new do |s|
   s.files       = `git ls-files`.split($/)
 
   s.add_dependency "dry-cli"
+  s.add_dependency "jira-ruby"
 end
