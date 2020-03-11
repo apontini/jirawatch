@@ -3,25 +3,17 @@ require 'jirawatch/jira/provider'
 module Jirawatch
   module CLI
     module AuthenticatedCommand
-      include Jirawatch::Jira::Provider
 
       def self.included(base)
 
-        def self.before(*names)
-          names.each do |name|
-            ObjectSpace.each_object(Class).select { |klass| klass.included_modules.include? self }.each do |klass|
-              m = klass.instance_method(name)
-              define_method(name) do |*args, &block|
-                yield
-                m.bind(self).(*args, &block)
-              end
+        def base.method_added(name)
+          if name.eql? :call and not method_defined? :alias_call
+            alias_method :alias_call, :call
+            define_method(:call) do |*args, &block|
+              @jira_account = Jirawatch::Jira::Provider.login
+              send :alias_call, *args
             end
           end
-        end
-
-        before :call do
-          puts "before"
-          Jirawatch::Jira::Provider.login
         end
 
       end
