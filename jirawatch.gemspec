@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Alberto Pontini"]
   s.email       = 'alberto.pontini@gmail.com'
   s.files       = `git ls-files`.split($/)
+  s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
 
   s.add_dependency "dry-cli"
   s.add_dependency "jira-ruby"
