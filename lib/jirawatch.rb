@@ -2,6 +2,7 @@ require 'dry/cli'
 require 'jirawatch/cli/version'
 require 'jirawatch/cli/track'
 require 'jirawatch/cli/login'
+require 'jirawatch/cli/projects'
 require 'jirawatch/jira/provisioning'
 require 'fileutils'
 
@@ -18,3 +19,4 @@ end
 Jirawatch.register "version", Jirawatch::CLI::Version
 Jirawatch.register "track", Jirawatch::CLI::Track
 Jirawatch.register "login", Jirawatch::CLI::Login
+Jirawatch.register "projects", Jirawatch::CLI::Projects

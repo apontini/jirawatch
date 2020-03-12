@@ -6,7 +6,6 @@ module Jirawatch
       include Jirawatch::CLI::AuthenticatedCommand
 
       def call(*)
-        puts "Logged as #{@jira_account.class}"
         puts 'tracking here'
       end
     end

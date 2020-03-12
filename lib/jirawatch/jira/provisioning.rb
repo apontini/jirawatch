@@ -1,39 +1,47 @@
 require 'jirawatch/jira/account'
+require 'jira-ruby'
 
 module Jirawatch
   module Jira
     module Provisioning
       @@config_path = File.expand_path "~/.jirawatch"
-      @@login_file = "login"
+      @@login_file = "access"
 
-      def login(username = nil, token = nil)
-        if username.nil? or token.nil?
-          puts 'Logging in from file...'
+      def login(username = nil, token = nil, site = nil)
+        if username.nil? or token.nil? or site.nil?
           unless File.exist? @@config_path + "/" + @@login_file
             return nil
           end
-          username = "user"
-          api_token = "password"
-          site = "site"
-        else
-          puts 'Logging in...'
-          username = "user"
-          api_token = "password"
-          site = "site"
+          File.open(@@config_path + "/" + @@login_file).each_line do |line|
+            binding.local_variable_set line.split(' ')[0], line.split(' ')[1]
+          end
         end
 
         options = {
             username: username,
-            password: api_token,
+            password: token,
             site: site,
+            context_path: '',
             auth_type: :basic,
             read_timeout: 120
         }
+
+        client = JIRA::Client.new(options)
+        begin
+          puts "Connected to #{client.ServerInfo.all.attrs["baseUrl"]}"
+          return client
+        rescue StandardError => e
+          puts "#{e.inspect} #{e.message}"
+          return nil
+        rescue JIRA::HTTPError => e
+          puts "#{e.response} #{e.message}"
+          return nil
+        end
       end
 
       def save_credentials(username, token, site)
         File.open(@@config_path + "/" + @@login_file, "w") do |f|
-          f.write "#{username}\n#{token}\n#{site}"
+          f.write "username #{username}\ntoken #{token}\nsite #{site}"
         end
       end
     end

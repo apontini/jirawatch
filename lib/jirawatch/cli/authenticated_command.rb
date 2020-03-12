@@ -11,9 +11,9 @@ module Jirawatch
           if name.eql? :call and not method_defined? :alias_call
             alias_method :alias_call, :call
             define_method(:call) do |*args, &block|
-              @jira_account = login
-              
-              if @jira_account.nil?
+              @jira_client = login
+
+              if @jira_client.nil?
                 puts "Login infos not found, please use: \n\njirawatch login\n\n"
               else
                 send :alias_call, *args
