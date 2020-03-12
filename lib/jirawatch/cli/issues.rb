@@ -19,12 +19,11 @@ module Jirawatch
               end
             rescue JIRA::HTTPError => e
               puts e.response.body
-
             rescue StandardError => e
               puts e.message
             end
           else
-            puts "Please specify the project ID"
+            puts "Please specify the project Id or Key"
           end
         end
       end
