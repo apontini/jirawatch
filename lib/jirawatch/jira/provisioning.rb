@@ -28,15 +28,15 @@ module Jirawatch
 
         client = JIRA::Client.new(options)
         begin
-          puts "Connected to #{client.ServerInfo.all.attrs["baseUrl"]}"
+          client.ServerInfo.all.attrs["baseUrl"]
           return client
         rescue StandardError => e
           puts "#{e.inspect} #{e.message}"
-          return nil
         rescue JIRA::HTTPError => e
-          puts "#{e.response} #{e.message}"
-          return nil
+          puts "#{e.response.body}"
         end
+
+        nil
       end
 
       def save_credentials(username, token, site)
