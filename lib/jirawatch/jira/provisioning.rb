@@ -30,10 +30,10 @@ module Jirawatch
         begin
           client.ServerInfo.all.attrs["baseUrl"]
           return client
-        rescue StandardError => e
-          puts "#{e.inspect} #{e.message}"
         rescue JIRA::HTTPError => e
-          puts "#{e.response.body}"
+          puts e.response.body
+        rescue StandardError => e
+          puts e.message
         end
 
         nil
