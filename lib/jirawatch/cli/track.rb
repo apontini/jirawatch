@@ -8,14 +8,9 @@ module Jirawatch
       argument :issue_key, required: true, desc: "The issue key that you want to track time for"
 
       def call(issue_key:, **options)
-        begin
-          @jira_client.Issue.find(issue_key)
-        rescue JIRA::HTTPError => e
-          puts e.response.body
-          return
-        end
+        @jira_client.Issue.find(issue_key) # Fails if issue doesn't exist
 
-        puts "Started loggin time for #{issue_key}"
+        puts "Logging time for #{issue_key}..."
         started_at = Time.now
 
         begin

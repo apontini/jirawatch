@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.date        = '2020-02-27'
   s.summary     = "Jira time tracker"
   s.description = "A simple way to track jira issues time"
-  s.authors     = ["Alberto Pontini"]
+  s.authors     = ["apontini"]
   s.email       = 'alberto.pontini@gmail.com'
   s.files       = `git ls-files`.split($/)
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }

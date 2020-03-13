@@ -1,11 +1,10 @@
 require 'dry/cli'
-require 'jirawatch/cli/version'
-require 'jirawatch/cli/track'
-require 'jirawatch/cli/login'
-require 'jirawatch/cli/projects'
-require 'jirawatch/cli/issues'
 require 'jirawatch/jira/provisioning'
 require 'fileutils'
+
+Dir['lib/jirawatch/cli/*'].sort.each do |file|
+  require File.expand_path(file)
+end
 
 module Jirawatch
   extend Dry::CLI::Registry

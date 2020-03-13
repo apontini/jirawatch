@@ -3,4 +3,21 @@ require 'bundler/setup'
 require 'dry/cli'
 require 'jirawatch'
 
-Dry::CLI.new(Jirawatch).call
+Dir['lib/jirawatch/errors/*', 'lib/jirawatch/utils/*'].each do |file|
+  require File.expand_path(file)
+end
+
+include Jirawatch::Utils::Messages
+
+begin
+  Dry::CLI.new(Jirawatch).call
+rescue Jirawatch::Errors::CommandFailed => e
+  puts e.message
+  exit -1
+rescue JIRA::HTTPError => e
+  puts e.response.body
+  exit -1
+rescue StandardError => e
+  puts e.message
+  exit -1
+end
