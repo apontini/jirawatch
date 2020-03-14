@@ -1,4 +1,4 @@
-require 'jirawatch/cli/authenticated_command'
+require 'tty-editor'
 
 module Jirawatch
   module CLI
@@ -22,15 +22,29 @@ module Jirawatch
 
           # Jira work logs have minute sensitivity thus API calls will fail with a time spent
           # which is less than 60 seconds
-          return if time_spent < 60
 
-          puts "\nLogging completed, you spent #{(time_spent / 60).floor} minutes on this issue, do you want to log it? [Y/n]"
+          fail! "Jira can't log less than 60 seconds of work" if time_spent < 60
+
+          TTY::Editor.open(
+              Jirawatch.configuration.template_track_file % started_at.to_i,
+              content: "\n" +
+                  "# You spent #{(time_spent / 60).floor} minutes on this issue" +
+                  "# Write here your work log description\n" +
+                  "# If you leave this empty, no work log will be saved"
+          )
+
+          worklog_lines = []
+          File.readlines(Jirawatch.configuration.template_track_file % started_at.to_i).each do |line|
+            worklog_lines << line unless line.start_with?("#") or line.strip.empty?
+          end
+
           @jira_client.Issue.find(issue_key).worklogs.build.save(
               {
                   timeSpentSeconds: time_spent,
-                  started: started_at.strftime("%Y-%m-%dT%H:%M:%S.%L%z")
+                  started: started_at.strftime("%Y-%m-%dT%H:%M:%S.%L%z"),
+                  comment: worklog_lines.join("\n")
               }
-          ) if STDIN.gets.chomp.downcase.eql? 'y'
+          ) unless worklog_lines.empty?
         end
       end
     end

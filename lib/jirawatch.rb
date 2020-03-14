@@ -1,6 +1,7 @@
 require 'dry/cli'
 require 'jirawatch/jira/provisioning'
 require 'fileutils'
+require 'jirawatch/config'
 
 Dir['lib/jirawatch/cli/*'].sort.each do |file|
   require File.expand_path(file)
@@ -10,14 +11,27 @@ module Jirawatch
   extend Dry::CLI::Registry
   include Jirawatch::Jira::Provisioning
 
-  unless Dir.exist? @@config_path
-    puts "Creating jirawatch config directory at #{@@config_path}"
-    FileUtils.mkdir_p @@config_path
+  attr_accessor :configuration
+
+  class << self
+    def configuration
+      @configuration || Jirawatch::Config.new
+    end
+
+    def configure
+      @configuration ||= Jirawatch::Config.new
+      yield @configuration
+    end
+  end
+
+  unless Dir.exist? configuration.config_path
+    puts "Creating jirawatch config directory at #{configuration.config_path}"
+    FileUtils.mkdir_p configuration.config_path
   end
 end
 
-Jirawatch.register "version", Jirawatch::CLI::Version
-Jirawatch.register "track", Jirawatch::CLI::Track
-Jirawatch.register "login", Jirawatch::CLI::Login
-Jirawatch.register "projects", Jirawatch::CLI::Projects
-Jirawatch.register "issues", Jirawatch::CLI::Issues
+  Jirawatch.register "version", Jirawatch::CLI::Version
+  Jirawatch.register "track", Jirawatch::CLI::Track
+  Jirawatch.register "login", Jirawatch::CLI::Login
+  Jirawatch.register "projects", Jirawatch::CLI::Projects
+  Jirawatch.register "issues", Jirawatch::CLI::Issues
