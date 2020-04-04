@@ -6,12 +6,14 @@ module Jirawatch
       include Jirawatch::CLI::AuthenticatedCommand
 
       argument :issue_key, required: true, desc: "The issue key that you want to track time for"
+      option :started_at, aliases: ["-t"], desc: "Issue track starting time with a HH:mm format"
 
       def call(issue_key:, **options)
         @jira_client.Issue.find(issue_key) # Fails if issue doesn't exist
 
         puts "Logging time for #{issue_key}..."
-        started_at = Time.now
+        started_at = Time.parse(options.fetch(:started_at, Time.now.to_s))
+        puts started_at
 
         begin
           loop do
@@ -45,6 +47,10 @@ module Jirawatch
                   comment: worklog_lines.join("\n")
               }
           ) unless worklog_lines.empty?
+
+          puts "Worklog was empty, time was not tracked" if worklog_lines.empty?
+
+          File.delete Jirawatch.configuration.template_track_file % started_at.to_i
         end
       end
     end
