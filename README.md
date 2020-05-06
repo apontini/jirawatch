@@ -23,6 +23,20 @@ gem install jirawatch-<gem-version>.gem
 
 You should now be good to go!
 
+### With Docker/Podman
+
+You can execute `jirawatch` without installing it on your machine! Jirawatch is available via Docker/Podman too, and it can be built from the repository with:
+```
+docker build -t <your username>/jirawatch
+docker run <your username>/jirawatch # enjoy the magic
+```
+
+Keep in mind that you need to setup persistence in order to store Jirawatch's configuration files. You can put in your `.bashrc` or `.zshrc` the following alias:
+```
+alias jirawatch="docker run --rm -it -v${HOME}/.jirawatch:/root/.jirawatch -v/etc/localtime:/etc/localtime:ro <your username>/jirawatch"
+```
+This will ensure persistence and will not modify your machine with additional packages ;)
+
 ## How to use
 As I stated before, this is not a complex tool! There are a few commands implemented as of right now:
 ```
