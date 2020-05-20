@@ -5,8 +5,9 @@ module Jirawatch
     class Track < Dry::CLI::Command
       include Jirawatch::CLI::AuthenticatedCommand
 
-      argument :issue_key, required: true, desc: "The issue key that you want to track time for"
-      option :started_at, aliases: ["-t"], desc: "Issue track starting time with a HH:mm format"
+      argument :issue_key, required: true, desc: "Issue key that you want to track time for"
+      option :started_at, aliases: ["-t"], desc: "Specify when you started working on this issue with a HH:mm format"
+      option :worklog_message, aliases: ["-m"], desc: "Specify a work log message"
 
       def call(issue_key:, **options)
         @jira_client.Issue.find(issue_key) # Fails if issue doesn't exist
@@ -27,16 +28,19 @@ module Jirawatch
 
           fail! "Jira can't log less than 60 seconds of work" if time_spent < 60
 
+          worklog_file = Jirawatch.configuration.template_worklog_file % started_at.to_i
+          worklog_lines = []
+
+          File.write worklog_file, options.fetch(:worklog_message) if options.key? :worklog_message
           TTY::Editor.open(
-              Jirawatch.configuration.template_track_file % started_at.to_i,
+              worklog_file,
               content: "\n" +
-                  "# You spent #{(time_spent / 60).floor} minutes on this issue" +
+                  "# You spent #{(time_spent / 60).floor} minutes on this issue\n" +
                   "# Write here your work log description\n" +
                   "# If you leave this empty, no work log will be saved"
-          )
+          ) unless options.key? :worklog_message
 
-          worklog_lines = []
-          File.readlines(Jirawatch.configuration.template_track_file % started_at.to_i).each do |line|
+          File.readlines(Jirawatch.configuration.template_worklog_file % started_at.to_i).each do |line|
             worklog_lines << line unless line.start_with?("#") or line.strip.empty?
           end
 
@@ -50,7 +54,7 @@ module Jirawatch
 
           puts "Worklog was empty, time was not tracked" if worklog_lines.empty?
 
-          File.delete Jirawatch.configuration.template_track_file % started_at.to_i
+          File.delete worklog_file
         end
       end
     end
