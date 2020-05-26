@@ -8,7 +8,7 @@ WORKDIR /workdir
 
 RUN apk add --no-cache git \
   && gem build jirawatch.gemspec \
-  && gem install jirawatch-0.3.0.gem \
+  && gem install jirawatch-"$(ruby -e 'load "lib/jirawatch/info.rb"; puts Jirawatch::Info::VERSION')".gem \
   && rm -rf workdir
 
 ENTRYPOINT ["/usr/local/bundle/bin/jirawatch"]
