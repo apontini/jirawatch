@@ -4,7 +4,8 @@ Tracking time is as simple as typing:
 ```
 jirawatch track ISSUE-873
 ```
-After that, jirawatch will start tracking your time and once you're done, a simple SIGINT (Ctrl + c) will stop tracking and save it to your Jira worklogs.
+After that, jirawatch will start tracking your time and, once you're done, you can press `Ctrl-c` to stop the time tracking and allow jirawatch to save it into the Jira worklogs of the related issue.
+If you need to stop tracking time, just press `Ctrl-p` and then press it again to resume.
 
 ## Installation
 There's no install script right now unfortunately (it will be coming though!).

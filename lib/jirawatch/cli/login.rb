@@ -6,7 +6,7 @@ module Jirawatch
       include Jirawatch::Jira::Provisioning
 
       def call(*)
-        puts "Enter you Jira URL (eg. https://veryimportantcompany.atlassian.net)"
+        puts "Enter your Jira URL (eg. https://veryimportantcompany.atlassian.net)"
         site = STDIN.gets.chomp
         puts "Please enter your jira email/username: "
         name = STDIN.gets.chomp
