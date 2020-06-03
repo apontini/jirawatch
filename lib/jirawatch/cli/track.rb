@@ -13,7 +13,7 @@ module Jirawatch
         @jira_client.Issue.find(issue_key) # Fails if issue doesn't exist
 
         tracking_started_at = Time.parse(options.fetch(:tracking_started_at, Time.now.to_s))
-        tracking_paused_at = 0
+        paused = false
         tracking_restarted_at = tracking_started_at.to_i
         partial_time_spent = 0
 
@@ -25,18 +25,17 @@ module Jirawatch
 
         reader = TTY::Reader.new
         reader.on(:keyctrl_p) do
-          if tracking_paused_at == 0
-            tracking_paused_at = Time.now.to_i
-            partial_time_spent += tracking_paused_at - tracking_restarted_at
+          unless paused
+            partial_time_spent += Time.now.to_i - tracking_restarted_at
             time_unit = partial_time_spent / 60 == 1 ? "minute" : "minutes"
             puts
             puts "Tracking has been paused with #{partial_time_spent / 60} #{time_unit} logged"
           else
-            tracking_paused_at = 0
             tracking_restarted_at = Time.now.to_i
             puts
             puts "Tracking has been restarted"
           end
+          paused = !paused
         end
 
         begin
@@ -44,7 +43,8 @@ module Jirawatch
             reader.read_line("")
           end
         rescue Interrupt
-          total_time_spent = partial_time_spent + (Time.now.to_i - tracking_restarted_at)
+          total_time_spent = partial_time_spent + (Time.now.to_i - tracking_restarted_at) unless paused
+          total_time_spent = partial_time_spent if paused
 
           # Jira work logs have minute sensitivity thus API calls will fail with a time spent
           # which is less than 60 seconds
