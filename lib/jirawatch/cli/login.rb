@@ -8,9 +8,9 @@ module Jirawatch
       def call(*)
         puts "Enter your Jira URL (eg. https://veryimportantcompany.atlassian.net)"
         site = STDIN.gets.chomp
-        puts "Please enter your jira email/username: "
+        puts "Enter your jira email/username: "
         name = STDIN.gets.chomp
-        puts "Please enter your API auth token: "
+        puts "Enter your API auth token: "
         token = STDIN.gets.chomp
 
         unless login name, token, site
@@ -18,8 +18,8 @@ module Jirawatch
           return
         end
 
-        puts "Login successful, credentials have been saved"
         save_credentials name, token, site
+        puts "Login successful, credentials have been saved"
       end
     end
   end
