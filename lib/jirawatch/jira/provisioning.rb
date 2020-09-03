@@ -29,8 +29,6 @@ module Jirawatch
           # Get some infos to check if login was successful
           client.ServerInfo.all.attrs["baseUrl"]
           return client
-        rescue JIRA::HTTPError => e
-          puts e.response.body
         rescue StandardError => e
           puts e.message
         end
@@ -42,6 +40,7 @@ module Jirawatch
         File.open(Jirawatch.configuration.login_file, "w") do |f|
           f.write ["username #{username}", "token #{token}", "site #{site}"].join "\n"
         end
+        File.chmod 0600, Jirawatch.configuration.login_file
       end
     end
   end
