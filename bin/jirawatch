@@ -6,7 +6,6 @@ Dir["#{__dir__}/../lib/jirawatch/**/*.rb"].sort.map { |file| File.expand_path(fi
 end
 require 'jirawatch'
 
-
 include Jirawatch::Utils::Messages
 
 begin
