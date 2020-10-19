@@ -5,6 +5,7 @@ module Jirawatch
   include Jirawatch::Jira::Provisioning
 
   attr_accessor :configuration
+  attr_accessor :strings
 
   class << self
     def configuration
@@ -14,6 +15,10 @@ module Jirawatch
     def configure
       @configuration ||= Jirawatch::Config.new
       yield @configuration
+    end
+
+    def strings
+      @strings || Jirawatch::Strings.new
     end
   end
 

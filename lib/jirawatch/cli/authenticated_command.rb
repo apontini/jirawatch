@@ -14,7 +14,7 @@ module Jirawatch
             define_method(:call) do |**args, &block|
               @jira_client = login
 
-              fail! "Login infos not found, please use: \n\njirawatch login\n\n" if @jira_client.nil?
+              fail! Jirawatch.strings.error_login_info_not_found if @jira_client.nil?
 
               puts "Connected to #{@jira_client.ServerInfo.all.attrs["baseUrl"]}\n\n"
               send :alias_call, **args
