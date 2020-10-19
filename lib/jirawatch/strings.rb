@@ -2,7 +2,9 @@ module Jirawatch
   class Strings
 
     attr_reader :tracking_file_content
-    attr_reader :tracking_cli
+    attr_reader :tracking_cli_name
+    attr_reader :tracking_cli_time
+    attr_reader :tracking_cli_inputs
     attr_reader :tracking_paused
     attr_reader :tracking_restarted
     attr_reader :tracking_less_than_60_secs
@@ -18,9 +20,14 @@ module Jirawatch
           "# If you leave this empty, no work log will be saved"
       ].join "\n"
 
-      @tracking_cli = [
-          "Logging time for %s: %s",
+      @tracking_cli_name = "Logging time for %s: %s"
+
+      @tracking_cli_time = [
           "Started at: %s",
+          "Time logged / Original Estimate: %dh %dm / %dh %dm",
+      ].join "\n"
+
+      @tracking_cli_inputs = [
           "Press CTRL-P to pause/restart tracking time",
           "Press CTRL-C to stop tracking time"
       ].join "\n"
