@@ -27,10 +27,10 @@ module Jirawatch
         tracking_restarted_at = tracking_started_at.to_i
         partial_time_spent = 0
 
-        worked_hours = (issue.attrs["fields"]["timetracking"]["timeSpentSeconds"]/60)/60
-        worked_minutes = (issue.attrs["fields"]["timetracking"]["timeSpentSeconds"]/60)%60
-        estimate_hours = (issue.attrs["fields"]["timetracking"]["originalEstimateSeconds"]/60)/60
-        estimate_minutes = (issue.attrs["fields"]["timetracking"]["originalEstimateSeconds"]/60)%60
+        worked_hours = ((issue.attrs["fields"]["timetracking"]["timeSpentSeconds"].presence || 0)/60)/60
+        worked_minutes = ((issue.attrs["fields"]["timetracking"]["timeSpentSeconds"].presence || 0)/60)%60
+        estimate_hours = ((issue.attrs["fields"]["timetracking"]["originalEstimateSeconds"].presence || 0)/60)/60
+        estimate_minutes = ((issue.attrs["fields"]["timetracking"]["originalEstimateSeconds"].presence || 0)/60)%60
         puts Jirawatch.strings.tracking_cli_name % [issue_key, issue.attrs["fields"]["summary"]]
         puts Jirawatch.strings.tracking_cli_time % [tracking_started_at.strftime("%Y-%m-%d %H:%M:%S"), worked_hours, worked_minutes, estimate_hours, estimate_minutes]
         puts Jirawatch.strings.tracking_cli_inputs
