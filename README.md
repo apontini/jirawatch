@@ -8,21 +8,23 @@ After that, jirawatch will start tracking your time and, once you're done, you c
 If you need to stop tracking time, just press `Ctrl-p` and then press it again to resume.
 
 ## Installation
-There's no install script right now unfortunately (it will be coming though!).
-For the time being, you need to install Ruby (2.7.0 was used do develop this gem but it should work from 2.1.0 onwards) using [rbenv](https://github.com/rbenv/rbenv).
 
-As a side note, I highly discourage installing Ruby without rbenv and installing rbenv from a package manager (reason is that rbenv packages are severely outdated most of the time), unless you know what you're doing of course!
+### From RubyGems
 
-After that, clone this repository and build this gem using:
-```
-gem build jirawatch.gemspec
-```
-and install it with:
-```
-gem install jirawatch-<gem-version>.gem
+Simply run
+```sh
+gem install jirawatch
 ```
 
-You should now be good to go!
+And you're good to go!
+
+### From GPR
+
+This gem is also available on the [Github Public Repository](https://github.com/apontini/jirawatch/packages/457041link).
+To install it using the `gem` command, run
+```sh
+gem install jirawatch --source "https://rubygems.pkg.github.com/apontini"
+```
 
 ### With Docker/Podman
 
@@ -44,6 +46,22 @@ Keep in mind that you need to setup persistence in order to store Jirawatch's co
 alias jirawatch="docker run --rm -it -v${HOME}/.jirawatch:/root/.jirawatch -v/etc/localtime:/etc/localtime:ro apontini/jirawatch"
 ```
 This will ensure persistence and will not modify your machine with additional packages ;)
+
+### The manual way
+You need to install Ruby (2.7.0 was used do develop this gem but it should work from 2.1.0 onwards) using [rbenv](https://github.com/rbenv/rbenv).
+
+As a side note, I highly discourage installing Ruby without rbenv and installing rbenv from a package manager (reason is that rbenv packages are severely outdated most of the time), unless you know what you're doing of course!
+
+After that, clone this repository and build this gem using:
+```
+gem build jirawatch.gemspec
+```
+and install it with:
+```
+gem install jirawatch-<gem-version>.gem
+```
+
+You should be good to go!
 
 ## How to use
 As I stated before, this is not a complex tool! There are a few commands implemented as of right now:
