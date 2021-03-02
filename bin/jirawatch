@@ -1,5 +1,4 @@
 #!/usr/bin/env -S ruby -W0
-require 'bundler/setup'
 require 'dry/cli'
 Dir["#{__dir__}/../lib/jirawatch/**/*.rb"].sort.map { |file| File.expand_path(file) }.each do |file|
   require file
