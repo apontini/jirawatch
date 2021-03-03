@@ -15,5 +15,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'dry-cli',  '~>0.6'
   s.add_dependency 'jira-ruby', '~>2.1'
-  s.add_dependency 'tty-editor', '~>0.6'
+  s.add_dependency 'tty-editor', '~>0.5.0'
 end
